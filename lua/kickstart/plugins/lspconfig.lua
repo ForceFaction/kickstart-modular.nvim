@@ -199,6 +199,7 @@ return {
           -- capabilities = {},
           settings = {
             Lua = {
+              telemetry = { enable = false },
               completion = {
                 callSnippet = 'Replace',
               },
