@@ -21,7 +21,7 @@ local function gh(repo) return 'https://github.com/' .. repo end
 --  - and more!
 --
 -- Thus, Language Servers are external tools that must be installed separately from
--- Neovim. This is where `mason` and related plugins come into play.
+-- Neovim.
 --
 -- If you're wondering about lsp vs treesitter, you can check out the wonderfully
 -- and elegantly composed help section, `:help lsp-vs-treesitter`
@@ -153,32 +153,7 @@ local servers = {
 
 vim.pack.add {
   gh 'neovim/nvim-lspconfig',
-  gh 'mason-org/mason.nvim',
-  gh 'mason-org/mason-lspconfig.nvim',
-  gh 'WhoIsSethDaniel/mason-tool-installer.nvim',
 }
-
--- Automatically install LSPs and related tools to stdpath for Neovim
-require('mason').setup {}
-
--- Translates between nvim-lspconfig server names and mason.nvim package names (e.g. lua_ls <-> lua-language-server)
-require('mason-lspconfig').setup {
-  automatic_enable = false, -- Change this to true if you want to automatically enable servers that are installed manually (e.g. via :Mason / :MasonInstall)
-}
-
--- Ensure the servers and tools above are installed
---
--- To check the current status of installed tools and/or manually install
--- other tools, you can run
---    :Mason
---
--- You can press `g?` for help in this menu.
-local ensure_installed = vim.tbl_keys(servers or {})
-vim.list_extend(ensure_installed, {
-  -- You can add other tools here that you want Mason to install
-})
-
-require('mason-tool-installer').setup { ensure_installed = ensure_installed }
 
 for name, server in pairs(servers) do
   vim.lsp.config(name, server)
