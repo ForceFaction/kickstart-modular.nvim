@@ -103,8 +103,20 @@ vim.api.nvim_create_autocmd('LspAttach', {
 --  See `:help lsp-config` for information about keys and how to configure
 ---@type table<string, vim.lsp.Config>
 local servers = {
-  -- clangd = {},
   -- gopls = {},
+  clangd = {
+    cmd = {
+      'clangd',
+      '--background-index',
+      '--background-index-priority=background',
+      '--pch-storage=disk',
+      '-j=2',
+      '--malloc-trim',
+      '--limit-references=100',
+      '--limit-results=20',
+      '--clang-tidy=false',
+    },
+  },
   -- pyright = {},
   -- rust_analyzer = {},
   --
