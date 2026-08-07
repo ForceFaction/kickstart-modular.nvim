@@ -95,6 +95,31 @@ vim.api.nvim_create_autocmd('LspAttach', {
     if client and client:supports_method('textDocument/inlayHint', event.buf) then
       map('<leader>th', function() vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled { bufnr = event.buf }) end, '[T]oggle Inlay [H]ints')
     end
+
+    -- Let Tinymist (Typst) pin the main file, such that the context in which a file
+    -- gets evaluated is known and does not lead to errors.
+    if client and client.name == 'tinymist' then
+      map(
+        '<leader>tp',
+        function()
+          vim.lsp.buf_request(0, 'workspace/executeCommand', {
+            command = 'tinymist.pinMain',
+            arguments = { vim.api.nvim_buf_get_name(0) },
+          })
+        end,
+        'Tinymist: [P]in main file'
+      )
+      map(
+        '<leader>tu',
+        function()
+          vim.lsp.buf_request(0, 'workspace/executeCommand', {
+            command = 'tinymist.pinMain',
+            arguments = { vim.NIL },
+          })
+        end,
+        'Tinymist: [U]npin main file'
+      )
+    end
   end,
 })
 
@@ -119,6 +144,7 @@ local servers = {
   gopls = {},
   -- pyright = {},
   rust_analyzer = {},
+  tinymist = {},
   --
   -- Some languages (like typescript) have entire language plugins that can be useful:
   --    https://github.com/pmizio/typescript-tools.nvim
