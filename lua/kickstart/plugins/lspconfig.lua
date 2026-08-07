@@ -145,6 +145,7 @@ local servers = {
     ---@type lspconfig.settings.lua_ls
     settings = {
       Lua = {
+        telemetry = { enable = false },
         format = { enable = false }, -- Disable formatting (formatting is done by stylua)
       },
     },
