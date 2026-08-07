@@ -55,4 +55,10 @@ vim.api.nvim_create_autocmd('FileType', {
   end,
 })
 
+-- Workaround: Guix's neovim 0.12 fails to auto-discover parsers via rtp,
+-- but explicit `path =` works. Load them ourselves.
+for _, lang in ipairs(available_parsers) do
+  vim.treesitter.language.add(lang, { path = vim.api.nvim_get_runtime_file('parser/' .. lang .. '.*', false)[1] })
+end
+
 -- vim: ts=2 sts=2 sw=2 et
