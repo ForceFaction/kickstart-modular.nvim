@@ -30,6 +30,8 @@ local function gh(repo) return 'https://github.com/' .. repo end
 vim.pack.add { gh 'j-hui/fidget.nvim' }
 require('fidget').setup {}
 
+vim.pack.add { gh 'barreiroleo/ltex_extra.nvim' }
+
 --  This function gets run when an LSP attaches to a particular buffer.
 --    That is to say, every time a new file is opened that is associated with
 --    an lsp (for example, opening `main.rs` is associated with `rust_analyzer`) this
@@ -185,6 +187,39 @@ local servers = {
       Lua = {
         telemetry = { enable = false },
         format = { enable = false }, -- Disable formatting (formatting is done by stylua)
+      },
+    },
+  },
+
+  ltex_plus = {
+    on_attach = function(client, bufnr)
+      require('ltex_extra').setup {
+        load_langs = { 'de-DE' },
+        init_check = true,
+        path = vim.fn.expand '.ltex',
+        log_level = 'none',
+      }
+    end,
+    filetypes = { 'typst', 'markdown', 'tex', 'plaintex', 'text' },
+    settings = {
+      ltex = {
+        language = 'de-DE',
+        additionalRules = {
+          enablePickyRules = true,
+          motherTongue = 'de-DE',
+          languageModel = vim.fn.expand '~/.local/share/ngrams',
+        },
+        dictionary = {
+          ['de-DE'] = { 'Typst', 'Neovim', 'Guix' },
+        },
+        disabledRules = {
+          ['de-DE'] = { 'WHITESPACE_RULE' },
+        },
+        checkFrequency = 'save',
+        java = {
+          initialHeapSize = 128,
+          maximumHeapSize = 2048,
+        },
       },
     },
   },
